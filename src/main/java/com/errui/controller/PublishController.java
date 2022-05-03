@@ -39,15 +39,9 @@ public class PublishController {
 
     @PostMapping("/publish")
     public String doPublish(@RequestParam(value = "title",required = false) String title, @RequestParam(value = "description", required = false) String description, @RequestParam(value = "tag", required = false) String tag, HttpServletRequest request, HttpServletResponse response, Model model) {
-//        Question doQuestion = new Question();
-
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
-
-//        doQuestion.setTitle(title);
-//        doQuestion.setDescription(description);
-//        doQuestion.setTag(tag);
 
         if (title == null || title == "") {
             model.addAttribute("error", "标题不能为空");
@@ -67,7 +61,7 @@ public class PublishController {
 
         User user = null;
         Cookie[] cookies = request.getCookies();
-        if (cookies !=null){
+        if (cookies !=null && cookies.length != 0){
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();

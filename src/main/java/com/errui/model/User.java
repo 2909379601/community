@@ -33,4 +33,6 @@ public class User extends BaseDo {
      */
     private String token;
 
+    private String avatarUrl;
+
 }
