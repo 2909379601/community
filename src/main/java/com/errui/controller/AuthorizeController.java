@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
@@ -45,7 +44,6 @@ public class AuthorizeController {
     @RequestMapping("/callBack")
     public String callBack(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest request,
                            HttpServletResponse response) {
         AccessTokenDto accessTokenDto = new AccessTokenDto();
         accessTokenDto.setClient_id(clientId);
@@ -55,7 +53,7 @@ public class AuthorizeController {
         accessTokenDto.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDto);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        if (githubUser != null) {
+        if (githubUser != null && githubUser.getId() != null) {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);

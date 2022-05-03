@@ -1,5 +1,6 @@
 package com.errui.model;
 
+import com.errui.common.BaseDo;
 import lombok.Data;
 
 /**
@@ -10,7 +11,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class User {
+public class User extends BaseDo {
 
     /**
      * ID
@@ -32,13 +33,4 @@ public class User {
      */
     private String token;
 
-    /**
-     * gmtCreate
-     */
-    private Long gmtCreate;
-
-    /**
-     * gntModified
-     */
-    private Long gmtModified;
 }
