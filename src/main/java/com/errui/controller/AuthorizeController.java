@@ -2,6 +2,8 @@ package com.errui.controller;
 
 import com.errui.dto.AccessTokenDto;
 import com.errui.entity.GithubUser;
+import com.errui.mapper.UserMapper;
+import com.errui.model.User;
 import com.errui.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @Author: Erruihhh
@@ -35,6 +38,9 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @RequestMapping("/callBack")
     public String callBack(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
@@ -47,10 +53,17 @@ public class AuthorizeController {
         accessTokenDto.setRedirect_uri(redirectUri);
         accessTokenDto.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDto);
-        GithubUser user = githubProvider.getUser(accessToken);
-        if (user != null) {
+        GithubUser githubUser = githubProvider.getUser(accessToken);
+        if (githubUser != null) {
+            User user = new User();
+            user.setToken(UUID.randomUUID().toString());
+            user.setName(githubUser.getName());
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insert(user);
             //登录成功，写cookie和session
-            request.getSession().setAttribute("user", user);
+            request.getSession().setAttribute("user", githubUser);
             try {
                 response.sendRedirect("/");
             } catch (IOException e) {
@@ -59,6 +72,11 @@ public class AuthorizeController {
             return null;
         } else {
             //登陆失败,重新登录
+            try {
+                response.sendRedirect("/");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             return null;
         }
     }

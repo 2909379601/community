@@ -60,6 +60,23 @@ http://localhost:8887
 |UFile|https://github.com/ucloud/ufile-sdk-java|
 |Bootstrap|https://v3.bootcss.com/getting-started/|
 
+## 脚本
+```sql
+create table USER
+(
+ID           INT auto_increment,
+ACCOUNT_ID   VARCHAR(100),
+NAME         VARCHAR(50),
+TOKEN        CHAR(36),
+GMT_CREATE   BIGINT,
+GMT_MODIFIED BIGINT,
+constraint USER_PK
+primary key (ID)
+);
+
+comment on table USER is '用户表';
+```
+
 ## 扩展资料
 [Spring 文档](https://spring.io/guides)    
 [Spring Web](https://spring.io/guides/gs/serving-web-content/)   
