@@ -18,12 +18,12 @@ public class GithubUser {
     private Long id;
 
     /**
-     * 用户name
+     * 用户姓名
      */
     private String name;
 
     /**
-     * bio
+     * 用户简介
      */
     private String bio;
 }
